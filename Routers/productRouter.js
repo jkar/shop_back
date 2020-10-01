@@ -3,7 +3,7 @@ const Product = require('../Models/products');
 
 productsRouter.get('/count', async (req, res, next) => {
     try {
-        const limit = req.body.limit;
+        const limit = req.query.limit;
         const count = await Product.count();
         let numberOfPages = Math.floor( count / limit );
         if (count % limit !== 0) {
@@ -19,8 +19,10 @@ productsRouter.get('/count', async (req, res, next) => {
 productsRouter.get('/', async (req, res, next) => {
 
     try {
-    const offset = req.body.offset;
-    const limit = req.body.limit
+    const offset = parseInt(req.query.offset);
+    const limit = parseInt(req.query.limit);
+    console.log('limit', limit);
+    console.log('ofst', offset);
     const result = await Product.find().skip(offset).limit(limit);
     res.status(200).send(result);
     } catch (err) {
