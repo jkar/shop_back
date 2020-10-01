@@ -1,15 +1,17 @@
 const productsRouter = require('express').Router();
 const Product = require('../Models/products');
 
+productsRouter.get('/', async (req, res, next) => {
 
+    const offset = req.body.offset;
+    const limit = req.body.limit
+    console.log('req', req.body);
+    const result = await Product.find().skip(offset).limit(limit);
+    res.status(200).send(result);
+});
 
 productsRouter.post('/', async (req, res, next) => {
-    // let p = {
-    //     title : "ring",
-    //     description: "gold",
-    //     number: 1
-    // }
-    console.log('req', req.body);
+
     try {
         let p = {
             title : req.body.title,
