@@ -1,10 +1,26 @@
-const express = require('express')
-const app = express()
-const port = 3000
+const express = require('express');
+var mongoose = require('mongoose');
+const app = express();
+const port = 3001;
+MONGODB_URI="mongodb://localhost:27017/shop";
+// const Product = require('./Models/products');
+const productsRouter = require('./Routers/productRouter');
+
+
+mongoose.connect(MONGODB_URI, { useUnifiedTopology: true, useNewUrlParser: true})
+  .then(() => {
+    console.log('connected to MongoDB')
+  })
+  .catch((error) => {
+    console.log('error connection to MongoDB:', error.message)
+  })
 
 app.get('/', (req, res) => {
-  res.send('Hello World!!!!')
+  res.send('Hello World!!!!');
 })
+
+app.use('/api/products', productsRouter);
+
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
