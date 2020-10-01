@@ -17,6 +17,9 @@ mongoose.connect(MONGODB_URI, { useUnifiedTopology: true, useNewUrlParser: true}
     console.log('error connection to MongoDB:', error.message)
   })
 
+app.use(cors());
+app.use(bodyParser.json());
+
 app.get('/', (req, res) => {
   res.send('Hello World!!!!');
 })
