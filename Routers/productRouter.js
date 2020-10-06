@@ -1,5 +1,32 @@
 const productsRouter = require('express').Router();
 const Product = require('../Models/products');
+var multer  = require('multer');
+// var upload = multer({ dest: 'uploads/' });
+
+const storage = multer.diskStorage({
+    destination : function ( req, file, cb) {
+        cb(null, './uploads/');
+    },
+    filename : function ( req, file, cb) {
+        cb(null, Date.now() + '-' +  file.originalname);
+    }
+});
+
+const fileFilter = (req, file, cb) => {
+
+    if ( file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+        cb(null, true);
+    } else {
+        cb(new Error('Wrong type of file'), false);
+    }
+};
+
+var upload = multer({ 
+    storage : storage,
+    limits : { fileSize : 1024 * 1024 * 5 },
+    fileFilter : fileFilter    
+});
+
 
 productsRouter.get('/count', async (req, res, next) => {
     try {
@@ -30,22 +57,26 @@ productsRouter.get('/', async (req, res, next) => {
     }
 });
 
-productsRouter.post('/', async (req, res, next) => {
+productsRouter.post('/', upload.single('file') , async (req, res, next) => {
 
-    try {
-        let p = {
-            title : req.body.title,
-            description: req.body.description,
-            number: req.body.number
-        }
-        const prod = new Product(p);
-        const result = await prod.save();
-        console.log('res', result);
-        res.status(200).send(result);
-    } catch (err) {
-        res.status(400).send({msg : err});
-    }
+    // try {
+    //     let p = {
+    //         title : req.body.title,
+    //         description: req.body.description,
+    //         number: req.body.number
+    //     }
+    //     const prod = new Product(p);
+    //     const result = await prod.save();
+    //     console.log('res', result);
+    //     res.status(200).send(result);
+    // } catch (err) {
+    //     res.status(400).send({msg : err});
+    // }
 
-})
+    console.log('req.body.title', req.body.title);
+    console.log('files', req.file);
+
+
+});
 
 module.exports = productsRouter;
