@@ -19,6 +19,7 @@ mongoose.connect(MONGODB_URI, { useUnifiedTopology: true, useNewUrlParser: true}
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use('/uploads', express.static('uploads'));
 
 app.get('/', (req, res) => {
   res.send('Hello World!!!!');

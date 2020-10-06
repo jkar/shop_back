@@ -12,7 +12,7 @@ const productSchema = new mongoose.Schema({
     description: {
         type: String
     },
-    path : {
+    imagePath : {
         type : String
     },
     number: {

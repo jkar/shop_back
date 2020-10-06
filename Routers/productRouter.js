@@ -59,22 +59,26 @@ productsRouter.get('/', async (req, res, next) => {
 
 productsRouter.post('/', upload.single('file') , async (req, res, next) => {
 
-    // try {
-    //     let p = {
-    //         title : req.body.title,
-    //         description: req.body.description,
-    //         number: req.body.number
-    //     }
-    //     const prod = new Product(p);
-    //     const result = await prod.save();
-    //     console.log('res', result);
-    //     res.status(200).send(result);
-    // } catch (err) {
-    //     res.status(400).send({msg : err});
-    // }
+    try {
+        let p = {
+            title : req.body.title,
+            description : req.body.description,
+            imagePath : req.file.path,
+            number : 1
+        }
 
-    console.log('req.body.title', req.body.title);
-    console.log('files', req.file);
+        // console.log('path', p);
+        const prod = new Product(p);
+        const result = await prod.save();
+        console.log('res', result);
+        res.status(200).send(result);
+    } catch (err) {
+        res.status(400).send({msg : err});
+    }
+
+    // console.log('req.body.title', req.body.title);
+    // console.log('files', req.file);
+
 
 
 });
