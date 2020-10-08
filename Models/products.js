@@ -17,7 +17,11 @@ const productSchema = new mongoose.Schema({
     },
     number: {
         type: Number
-    }
+    },
+    // user: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'User'
+    //   }
 });
 
 // blogSchema.plugin(uniqueValidator, { type: 'mongoose-unique-validator' });

@@ -7,6 +7,7 @@ const port = 3001;
 MONGODB_URI="mongodb://localhost:27017/shop";
 // const Product = require('./Models/products');
 const productsRouter = require('./Routers/productRouter');
+const userRouter = require('./Routers/userRouter');
 
 
 mongoose.connect(MONGODB_URI, { useUnifiedTopology: true, useNewUrlParser: true})
@@ -26,6 +27,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/api/products', productsRouter);
+app.use('/api/user', userRouter);
 
 
 app.listen(port, () => {
