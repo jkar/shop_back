@@ -7,10 +7,11 @@ productsRouter.post('/', async (req, res, next) => {
     try {
     console.log('req', req.body);
     const saltRounds = await bcrypt.genSaltSync(10);
-    const passwordHash = await bcrypt.hashSync(req.body.password, saltRounds);
+    const passwordHash = await bcrypt.hashSync(req.body.params.password, saltRounds);
 
     const u = {
-        username : req.body.username,
+        name : req.body.params.name,
+        username : req.body.params.username,
         password : passwordHash
     }
     const user = new User(u);

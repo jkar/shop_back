@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const loginRouter = require('express').Router();
 const User = require('../Models/users');
 
@@ -14,23 +15,23 @@ loginRouter.post('/', async (req, res, next) => {
 
         // if (!(user && passwordCorrect)) {
         if (user === null || passwordCorrect === false) {
-            res.json({
+            res.status(401).json({
             error: 'invalid username or password'
             });
           } else {
 
         const userForToken = {
+            name: user.name,
             username: user.username,
             id: user._id,
           }
         
-          const token = jwt.sign(userForToken, 'login')
+          const token = jwt.sign(userForToken, 'login');
         
           res
             .status(200)
-            .send({ token, username: user.username });
+            .send({ token, username: user.username, name : user.name });
 
-        res.send({ msg : "send"});
         }
 
     } catch (err) {

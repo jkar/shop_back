@@ -67,7 +67,6 @@ productsRouter.post('/', upload.single('file') , async (req, res, next) => {
             number : 1
         }
 
-        // console.log('path', p);
         const prod = new Product(p);
         const result = await prod.save();
         console.log('res', result);
@@ -75,11 +74,6 @@ productsRouter.post('/', upload.single('file') , async (req, res, next) => {
     } catch (err) {
         res.status(400).send({msg : err});
     }
-
-    // console.log('req.body.title', req.body.title);
-    // console.log('files', req.file);
-
-
 
 });
 

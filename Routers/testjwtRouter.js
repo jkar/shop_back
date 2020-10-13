@@ -10,17 +10,17 @@ testjwtRouter.post('/', async (req, res, next) => {
         console.log(token);
         if (!token) {
             console.log('no token')
-            res.json({msg : "no token"});
+            return res.status(400).json({msg : "no token"});
         } else {
         token = token.substring(7);
 
         jwt.verify(token, 'login', (err, authData) => {
             if (err) {
                 console.log('invalid token')
-                res.send({ err : "INVALID TOKEN" });
+                return res.status(401).send({ err : "INVALID TOKEN" });
             } else {
                 console.log('valid jwt')
-                res.status(200).json({ msg : "jwt valid" , authData : authData });
+                return res.status(200).json({ msg : "jwt valid" , authData : authData });
             }
         });
     }
