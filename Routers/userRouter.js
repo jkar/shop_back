@@ -22,7 +22,7 @@ productsRouter.post('/', async (req, res, next) => {
     }
     const user = new User(u);
     const result = await user.save();
-    res.status(200).json(result);
+     return res.status(200).json(result);
     } catch (err) {
         return res.status(400).json({ msg : err.message});
     }
