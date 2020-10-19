@@ -32,7 +32,8 @@ var upload = multer({
 productsRouter.get('/count', async (req, res, next) => {
     try {
         const limit = req.query.limit;
-        const count = await Product.count();
+        // const count = await Product.count();
+        const count = await Product.countDocuments();
         let numberOfPages = Math.floor( count / limit );
         if (count % limit !== 0) {
             numberOfPages = numberOfPages + 1;
