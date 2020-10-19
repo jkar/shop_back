@@ -1,4 +1,5 @@
 const productsRouter = require('express').Router();
+const jwt = require('jsonwebtoken');
 const Product = require('../Models/products');
 var multer  = require('multer');
 // var upload = multer({ dest: 'uploads/' });
@@ -57,23 +58,45 @@ productsRouter.get('/', async (req, res, next) => {
     }
 });
 
-productsRouter.post('/', upload.single('file') , async (req, res, next) => {
+productsRouter.post('/', upload.single('file') , (req, res, next) => {
 
-    try {
-        let p = {
-            title : req.body.title,
-            description : req.body.description,
-            imagePath : req.file.path,
-            number : 1
+
+        let token = req.headers['authorization'];
+        console.log(token);
+        if (!token) {
+            console.log('no token')
+            return res.status(400).json({msg : "no token"});
+        } else {
+        token = token.substring(7);
+
+        jwt.verify(token, 'login', async (err, authData) => {
+
+            try {
+
+            if (err) {
+                console.log('invalid token')
+                return res.status(401).send({ msg : "INVALID TOKEN" });
+            } else {
+                console.log('valid jwt')
+
+                let p = {
+                    title : req.body.title,
+                    description : req.body.description,
+                    imagePath : req.file.path,
+                    number : 1
+                }
+        
+                const prod = new Product(p);
+                const result = await prod.save();
+                console.log('res', result);
+                return res.status(200).send(result);
+            }
+            } catch (err) {
+                return res.status(400).json({msg : err.message});
+            }
+
+        });
         }
-
-        const prod = new Product(p);
-        const result = await prod.save();
-        console.log('res', result);
-        return res.status(200).send(result);
-    } catch (err) {
-        return res.status(400).json({msg : err.message});
-    }
 
 });
 
