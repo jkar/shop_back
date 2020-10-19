@@ -70,10 +70,9 @@ productsRouter.post('/', upload.single('file') , async (req, res, next) => {
         const prod = new Product(p);
         const result = await prod.save();
         console.log('res', result);
-        res.status(200).send(result);
+        return res.status(200).send(result);
     } catch (err) {
-        console.log('AAAAAA',err.errors.title);
-        res.status(400).send({msg : err.errors.title});
+        return res.status(400).json({msg : err.message});
     }
 
 });
