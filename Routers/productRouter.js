@@ -124,7 +124,7 @@ productsRouter.delete('/:id', (req, res, next) => {
                     const id = req.params.id;
                     console.log('ID', id);
 
-                    // const result = await Product.findByIdAndDelete(id);
+                    const result = await Product.findByIdAndDelete(id);
                     return res.status(204).end();
                 }
             } catch (err) {
