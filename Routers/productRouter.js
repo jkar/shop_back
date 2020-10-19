@@ -101,4 +101,37 @@ productsRouter.post('/', upload.single('file') , (req, res, next) => {
 
 });
 
+productsRouter.delete('/:id', (req, res, next) => {
+
+    let token = req.headers['authorization'];
+        console.log(token);
+        if (!token) {
+            console.log('no token')
+            return res.status(400).json({msg : "no token"});
+        } else {
+            token = token.substring(7);
+
+            jwt.verify(token, 'login', async (err, authData) => {
+
+            try {
+
+                if (err) {
+                    console.log('invalid token')
+                    return res.status(401).send({ msg : "INVALID TOKEN" });
+                } else {
+                    console.log('valid jwt')
+            
+                    const id = req.params.id;
+                    console.log('ID', id);
+
+                    // const result = await Product.findByIdAndDelete(id);
+                    return res.status(204).end();
+                }
+            } catch (err) {
+                    return res.status(400).json({msg : err});
+                }
+            });
+        }
+});
+
 module.exports = productsRouter;
