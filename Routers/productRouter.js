@@ -52,7 +52,7 @@ productsRouter.get('/', async (req, res, next) => {
     const limit = parseInt(req.query.limit);
     console.log('limit', limit);
     console.log('ofst', offset);
-    const result = await Product.find().skip(offset).limit(limit);
+    const result = await Product.find().sort('number').skip(offset).limit(limit);
     res.status(200).send(result);
     } catch (err) {
         res.status(400).send({msg : err});
@@ -132,6 +132,58 @@ productsRouter.delete('/:id', (req, res, next) => {
                 }
             });
         }
+});
+
+productsRouter.put('/:id', upload.single('file'), (req, res, next) => {
+    // productsRouter.put('/:id', (req, res, next) => {
+
+
+    let token = req.headers['authorization'];
+    console.log(token);
+    if (!token) {
+        console.log('no token')
+        return res.status(400).json({msg : "no token"});
+    } else {
+    token = token.substring(7);
+
+    jwt.verify(token, 'login', async (err, authData) => {
+        try {
+
+        if (err) {
+            console.log('invalid token')
+            return res.status(401).send({ msg : "INVALID TOKEN" });
+        } else {
+            console.log('valid jwt')
+
+            let id = req.params.id;
+            //id = id.substring(3);
+            console.log('ID', id);
+
+            let p = new Product( {
+                title : req.body.title,
+                description : req.body.description,
+                imagePath : "ff.png",
+                number : 100
+            });
+
+            let productToUpdate = {}
+
+            productToUpdate = Object.assign(productToUpdate, p._doc);
+            delete productToUpdate._id;
+    
+            const prod = new Product(p);
+            const result = await Product.findByIdAndUpdate(id, productToUpdate, {new : true});
+            console.log('res', result);
+            return res.status(200).send(result);
+        }
+        } catch (err) {
+            console.log('err', err)
+            return res.status(400).json({msg : err.message});
+        }
+    });
+    }
+
+
 });
 
 module.exports = productsRouter;
