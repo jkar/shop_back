@@ -2,6 +2,7 @@ const productsRouter = require('express').Router();
 const jwt = require('jsonwebtoken');
 const Product = require('../Models/products');
 var multer  = require('multer');
+const fs = require('fs');
 // var upload = multer({ dest: 'uploads/' });
 
 const storage = multer.diskStorage({
@@ -104,7 +105,7 @@ productsRouter.post('/', upload.single('file') , (req, res, next) => {
 productsRouter.delete('/:id', (req, res, next) => {
 
     let token = req.headers['authorization'];
-        console.log(token);
+    console.log(token);
         if (!token) {
             console.log('no token')
             return res.status(400).json({msg : "no token"});
@@ -126,6 +127,46 @@ productsRouter.delete('/:id', (req, res, next) => {
 
                     const result = await Product.findByIdAndDelete(id);
                     return res.status(204).end();
+                }
+            } catch (err) {
+                    return res.status(400).json({msg : err});
+                }
+            });
+        }
+});
+
+// POST gia na kanei delete to img amesws meta to router.delete gia tin card sti mongo
+productsRouter.post('/img', (req, res, next) => {
+
+    let token = req.headers['authorization'];
+    console.log(token);
+        if (!token) {
+            console.log('no token')
+            return res.status(400).json({msg : "no token"});
+        } else {
+            token = token.substring(7);
+
+            jwt.verify(token, 'login', async (err, authData) => {
+
+            try {
+
+                if (err) {
+                    console.log('invalid token')
+                    return res.status(401).send({ msg : "INVALID TOKEN" });
+                } else {
+                    console.log('valid jwt')
+            
+                    let path = req.body.img;
+                    console.log('img', path);
+
+                    fs.unlink(path, (err) => {
+                        if (err) {
+                          console.error(err)
+                          return
+                        }
+                    })
+
+                    return res.status(200).send({msg : 'deleted'})
                 }
             } catch (err) {
                     return res.status(400).json({msg : err});
