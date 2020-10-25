@@ -203,7 +203,7 @@ productsRouter.put('/:id', upload.single('file'), (req, res, next) => {
             let p = new Product( {
                 title : req.body.title,
                 description : req.body.description,
-                imagePath : "ff.png",
+                imagePath : req.file.path,
                 number : 100
             });
 
@@ -225,6 +225,54 @@ productsRouter.put('/:id', upload.single('file'), (req, res, next) => {
     }
 
 
+});
+
+productsRouter.put('/withoutImage/:id', (req, res, next) => {
+
+    let token = req.headers['authorization'];
+    console.log(token);
+    if (!token) {
+        console.log('no token')
+        return res.status(400).json({msg : "no token"});
+    } else {
+    token = token.substring(7);
+
+    jwt.verify(token, 'login', async (err, authData) => {
+        try {
+
+        if (err) {
+            console.log('invalid token')
+            return res.status(401).send({ msg : "INVALID TOKEN" });
+        } else {
+            console.log('valid jwt')
+
+            let id = req.params.id;
+            //id = id.substring(3);
+            console.log('ID', id);
+
+            let p = new Product( {
+                title : req.body.title,
+                description : req.body.description,
+                imagePath : req.body.imagePath,
+                number : 100
+            });
+
+            let productToUpdate = {}
+
+            productToUpdate = Object.assign(productToUpdate, p._doc);
+            delete productToUpdate._id;
+    
+            const prod = new Product(p);
+            const result = await Product.findByIdAndUpdate(id, productToUpdate, {new : true});
+            console.log('res', result);
+            return res.status(200).send(result);
+        }
+        } catch (err) {
+            console.log('err', err)
+            return res.status(400).json({msg : err.message});
+        }
+    });
+    }
 });
 
 module.exports = productsRouter;
