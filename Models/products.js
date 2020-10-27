@@ -15,9 +15,13 @@ const productSchema = new mongoose.Schema({
     imagePath : {
         type : String
     },
-    number: {
-        type: Number
-    },
+    date : {
+        type: Date,
+        required: true
+    }
+    // number: {
+    //     type: Number
+    // },
     // user: {
     //     type: mongoose.Schema.Types.ObjectId,
     //     ref: 'User'

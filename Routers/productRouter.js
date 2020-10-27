@@ -85,7 +85,7 @@ productsRouter.post('/', upload.single('file') , (req, res, next) => {
                     title : req.body.title,
                     description : req.body.description,
                     imagePath : req.file.path,
-                    number : 1
+                    date : req.body.date
                 }
         
                 const prod = new Product(p);
@@ -204,7 +204,7 @@ productsRouter.put('/:id', upload.single('file'), (req, res, next) => {
                 title : req.body.title,
                 description : req.body.description,
                 imagePath : req.file.path,
-                number : 100
+                date : req.body.date
             });
 
             let productToUpdate = {}
@@ -254,7 +254,7 @@ productsRouter.put('/withoutImage/:id', (req, res, next) => {
                 title : req.body.title,
                 description : req.body.description,
                 imagePath : req.body.imagePath,
-                number : 100
+                date : req.body.date
             });
 
             let productToUpdate = {}
