@@ -53,7 +53,9 @@ productsRouter.get('/', async (req, res, next) => {
     const limit = parseInt(req.query.limit);
     console.log('limit', limit);
     console.log('ofst', offset);
-    const result = await Product.find().sort('number').skip(offset).limit(limit);
+    // const result = await Product.find().sort('number').skip(offset).limit(limit);
+    const result = await Product.find().sort({date: -1}).skip(offset).limit(limit);
+
     res.status(200).send(result);
     } catch (err) {
         res.status(400).send({msg : err});
