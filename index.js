@@ -9,6 +9,7 @@ MONGODB_URI="mongodb://localhost:27017/shop";
 const productsRouter = require('./Routers/productRouter');
 const userRouter = require('./Routers/userRouter');
 const loginRouter = require('./Routers/loginRouter');
+const filtersRouter = require('./Routers/filtersRouter');
 const testjwtRouter = require('./Routers/testjwtRouter');
 
 
@@ -31,6 +32,7 @@ app.get('/', (req, res) => {
 app.use('/api/products', productsRouter);
 app.use('/api/user', userRouter);
 app.use('/api/login', loginRouter);
+app.use('/api/filters', filtersRouter);
 app.use('/api/test', testjwtRouter);
 
 
